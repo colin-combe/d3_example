@@ -14,6 +14,21 @@ function initialise(json) {
 		.attr("width", width)
 		.attr("height", height);
 
+		svg.append("defs").selectAll("marker")
+		    .data(["suit", "licensing", "resolved"])
+		  .enter().append("marker")
+		    .attr("id", function(d) { return d; })
+		    .attr("viewBox", "0 -5 10 10")
+		    .attr("refX", 25)
+		    .attr("refY", 0)
+		    .attr("markerWidth", 6)
+		    .attr("markerHeight", 6)
+		    .attr("orient", "auto")
+		  .append("path")
+		    .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+		    .style("stroke", "#4679BD")
+		    .style("opacity", "0.6");
+
 	var unfilteredLinks, links, nodes, linkSel, nodeSel;
 
     links = json.links;
@@ -23,7 +38,9 @@ function initialise(json) {
 		linkSel = svg.selectAll(".link")
 			.data(links)
 			.enter().append("line")
-			.attr("class", "link");
+			.attr("class", function(d){return d.type})
+			.style("marker-end",  "url(#suit)") // Modified line
+			;
 			// .style("stroke-width", function (d) {
 			// 	//console.log(">>>>"+d.value);
 			// 	return (d.value * 4);
