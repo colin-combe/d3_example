@@ -8,6 +8,14 @@ d3.text("subcell.txt", function(error, text) {
       currentLine++;
     }
 
+    function removeFullStop (id) {
+      id = id.toUpperCase();
+      if (id[id.length - 1] == '.') {
+        return id.substring(0, id.length - 1);
+      }
+      return id;
+    }
+
     var nodeMap = new Map();
     var node;
 
@@ -19,15 +27,15 @@ d3.text("subcell.txt", function(error, text) {
         switch (lId) {
           case "ID":
             console.log(val);
-            node = {"id":val};
+            node = {"id":removeFullStop(val), "type":"ID"};
             break;
           case "IT":
             console.log(val);
-            node = {"id":val};
+            node = {"id":removeFullStop(val), "type":"IT"};
             break;
           case "IO":
             console.log(val);
-            node = {"id":val};
+            node = {"id":removeFullStop(val), "type":"IO"};
             break;
           case "//":
           nodeMap.set(node.id, node);
@@ -53,30 +61,44 @@ d3.text("subcell.txt", function(error, text) {
 
     var links =[];
 
+    // for (var n = 0; n < nodesArr.length; n++){
+    //   var node = nodesArr[n];
+    //   var hp = node["HP"];
+    //   if (hp) {
+    //     for (var m = 0; m < hp.length; m++) {
+    //       var target = nodeMap.get(hp[m]);
+    //       links.push({"source":node, "target":target, "type":"HP"});
+    //     }
+    //   }
+    // }
+
+    // for (var n = 0; n < nodesArr.length; n++){
+    //   var node = nodesArr[n];
+    //   var hi = node["HI"];
+    //   if (hi) {
+    //     for (var m = 0; m < hi.length; m++) {
+    //       var target = nodeMap.get(hi[m]);
+    //       if (target){
+    //         links.push({"source":node, "target":target, "type":"HI"});
+    //       } else {
+    //         console.log("missing ID! Yikes! " + hi[m]);
+    //       }
+    //     }
+    //   }
+    // }
+
     for (var n = 0; n < nodesArr.length; n++){
       var node = nodesArr[n];
-      var hp = node["HP"];
-      if (hp) {
-        for (var m = 0; m < hp.length; m++) {
-          var target = nodeMap.get(hp[m]);
-          links.push({"source":node, "target":target, "type":"HD"});
+      var sl = node["SL"];
+      if (sl) {
+        sl = sl[0].split(",");
+        for (var s = 0; s < sl.length; s++) {
+          var target = nodeMap.get(removeFullStop(sl[s].trim()));
+          links.push({"source":node, "target":target, "type":"HP"});
         }
       }
     }
-    for (var n = 0; n < nodesArr.length; n++){
-      var node = nodesArr[n];
-      var hp = node["HI"];
-      if (hp) {
-        for (var m = 0; m < hp.length; m++) {
-          var target = nodeMap.get(hp[m]);
-          if (target){
-            links.push({"source":node, "target":target, "type":"HI"});
-          } else {
-            console.log("missing ID! Yikes! " + hp[m]);
-          }
-        }
-      }
-    }
+
 
     graph.links = links;
 

@@ -49,7 +49,7 @@ function initialise(json) {
 		// Create the node circles.
 		nodeSel = svg.selectAll(".node")
 				.data(nodes)
-				.enter().append("g").attr("class", "node")
+				.enter().append("g").attr("class", function(d){return d.type})
 				.on("click", function(d){console.log(d);})
 				.call(force.drag);
 
