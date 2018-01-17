@@ -89,6 +89,8 @@ function initialise (graph) {
                 .attr("width", w)
                 .attr("height", h);
 
+	 svg.on("mousedown", function () {force.stop();})
+
 	 topG = svg.append("svg:g");
 
     var path = topG.append("svg:g")
@@ -98,17 +100,24 @@ function initialise (graph) {
                   .attr("class", function (d) {
                       return "link " + d.type;
                   });
+		var drag = d3.behavior.drag()
+					.on("drag", function(d,i) {
+						d.x += d3.event.dx
+						d.y += d3.event.dy
+						tick();
+				});
+
 
 			var g = topG.append("svg:g")
 								.selectAll("g")
 								.data(force.nodes())
-								.enter().append("svg:g");
+								.enter().append("svg:g")
+								.call(drag);
 
 			var innerG = g.append("svg:g");
 
 		var circle = innerG.append("svg:circle")
-      .attr("r", 6)
-      .call(force.drag);
+      .attr("r", 6);
 
     var text = innerG.append("svg:g")
                   .attr("class", "nodeText");
@@ -221,6 +230,7 @@ function initialise (graph) {
 	zoom.on("zoom", function() {
 		topG.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 		innerG.attr("transform", "translate(0 0)scale(" + (1/d3.event.scale) + ")");
+		path.attr("stroke-width", (1.5/d3.event.scale) + "px");
 	});
 
 	svg.call(zoom);

@@ -1,3 +1,6 @@
+body {
+  user-select: none;
+}
 path.link {
     fill: none;
     stroke: #666;
