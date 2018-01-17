@@ -19,13 +19,18 @@ body {
 .HP {stroke: #1b9e77;}
 .SL {stroke: black;}
 
-.ID{fill: #a6cee3;}
+.ID{fill: black;}/*#a6cee3;}*/
 .IT{fill: #1f78b4;}
 .IO{fill: #b2df8a;}
 
 .node {
   stroke: black;
   fill: white;
+}
+
+.box {
+  stroke: black;
+  fill: none;
 }
 
 /* .node text {
@@ -49,6 +54,16 @@ body {
 
 <!-- <h3>Link threshold 0 <input type="range" id="thresholdSlider"
 name="points" value="0" min="0" max="100" oninput="threshold(this.value)"> 1</h3> -->
+<div>
+  <input type="checkbox" name="isA" id="isA_cb" value="value" onchange="filter()" checked>
+  <label for="isA_cb">Is a</label>
+  <input type="checkbox" name="partOf" id="partOf_cb" value="value" onchange="filter()" checked>
+  <label for="partOf_cb">Part of</label>
+  <input type="checkbox" name="location" id="location_cb" value="value" onchange="filter()" checked>
+  <label for="location_cb">"Location"</label>
+  <button type="button" onclick="force.start()">Layout</button>
+</div>
+<div id="networkDiv"/>
 
 <script src="d3.js"/></script>
 <script src="cola.js"/></script>
