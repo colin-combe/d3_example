@@ -87,9 +87,32 @@ function initialise (graph) {
 
     var svg = d3.select(".graphContainer").append("svg:svg")
                 .attr("width", w)
-                .attr("height", h);
+                .attr("height", h)
+								.on("mousedown", function () {force.stop();})
 
-	 svg.on("mousedown", function () {force.stop();})
+
+								svg.append("defs").selectAll("marker")
+								    .data(["HI", "HP", "SL"])
+								  .enter().append("marker")
+								    .attr("id", function(d) { return d; })
+								    .attr("viewBox", "0 -5 10 10")
+								    .attr("refX", 25)
+								    .attr("refY", 0)
+								    .attr("markerWidth", 6)
+								    .attr("markerHeight", 6)
+								    .attr("orient", "auto")
+								  .append("path")
+								    .attr("d",function (d) {
+												// if (d != "HP"){
+													 return "M0,-5L10,0L0,5 L10,0 L0, -5";
+												// } else {
+												// 	 return "M0 -5L10 0L0 10L-5 0z";
+												// }
+											})
+										.style("stroke", "#666")
+										.style("stroke-width", "1.5px");
+ 									 // .style("opacity", "0.6");
+
 
 	 topG = svg.append("svg:g");
 
@@ -101,7 +124,8 @@ function initialise (graph) {
                       return "link " + d.type;
                   })
 								.attr("stroke-width", 1.5 + "px")
-								.attr("stroke-dasharray", function (d) {return d.type == "HI"? (6) + ", " + (6) : null});
+								.attr("stroke-dasharray", function (d) {return d.type == "HI"? (6) + ", " + (6) : null})
+								    .style("marker-end", function (d) { return "url(#"+d.type+")";}); // Modified line ;
 
 		var drag = d3.behavior.drag()
 					.on("drag", function(d,i) {
@@ -148,7 +172,11 @@ function initialise (graph) {
             var dx = d.target.x - d.source.x,
                 dy = d.target.y - d.source.y,
                 dr = Math.sqrt(dx * dx + dy * dy);
-            return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y;
+						if (d.type != "SL"){
+							return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y;
+						} else {
+							return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
+						}
         });
 
 				// circle.attr("transform", function (d) {
