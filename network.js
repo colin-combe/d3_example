@@ -89,9 +89,9 @@ function initialise (graph) {
                 .attr("width", w)
                 .attr("height", h);
 
-	 g = svg.append("svg:g");
+	 topG = svg.append("svg:g");
 
-    var path = g.append("svg:g")
+    var path = topG.append("svg:g")
                   .selectAll("path")
                   .data(force.links())
                   .enter().append("svg:path")
@@ -99,17 +99,18 @@ function initialise (graph) {
                       return "link " + d.type;
                   });
 
-    var circle = g.append("svg:g")
-                    .selectAll("circle")
-                    .data(force.nodes())
-                    .enter().append("svg:circle")
-                    .attr("r", 6)
-                    .call(force.drag);
+			var g = topG.append("svg:g")
+								.selectAll("g")
+								.data(force.nodes())
+								.enter().append("svg:g");
 
-    var text = g.append("svg:g")
-                  .selectAll("g")
-                  .data(force.nodes())
-                  .enter().append("svg:g")
+			var innerG = g.append("svg:g");
+
+		var circle = innerG.append("svg:circle")
+      .attr("r", 6)
+      .call(force.drag);
+
+    var text = innerG.append("svg:g")
                   .attr("class", "nodeText");
 
     // A copy of the text with a thick white stroke for legibility.
@@ -138,13 +139,17 @@ function initialise (graph) {
             return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y;
         });
 
-        circle.attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")";
-        });
+				// circle.attr("transform", function (d) {
+	      //     return "translate(" + d.x + "," + d.y + ")";
+	      // });
+        //
+	      // text.attr("transform", function (d) {
+	      //     return "translate(" + d.x + "," + d.y + ")";
+	      // });
 
-        text.attr("transform", function (d) {
-            return "translate(" + d.x + "," + d.y + ")";
-        });
+				g.attr("transform", function (d) {
+				    return "translate(" + d.x + "," + d.y + ")";
+				});
     }
 
     // Method to create the filter
@@ -214,9 +219,8 @@ function initialise (graph) {
 	var max_zoom = 7;
 	var zoom = d3.behavior.zoom().scaleExtent([min_zoom,max_zoom])
 	zoom.on("zoom", function() {
-		g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-		circle.attr("transform", "scale(" + -d3.event.scale.z + ")");
-		text.attr("transform", "scale(" + -d3.event.scale.z + ")");
+		topG.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+		innerG.attr("transform", "translate(0 0)scale(" + (1/d3.event.scale) + ")");
 	});
 
 	svg.call(zoom);
