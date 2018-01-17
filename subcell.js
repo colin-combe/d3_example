@@ -1,5 +1,5 @@
-d3.text("subcell.txt", function(error, text) {
-    if (error) throw error;
+d3.text("subcell.txt", function(text) {
+    // if (error) throw error;
 
     var lines = text.split('\n');
     var currentLine = 0;
