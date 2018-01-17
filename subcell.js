@@ -70,7 +70,9 @@ d3.text("subcell.txt", function(text) {
       if (hp) {
         for (var m = 0; m < hp.length; m++) {
           var target = nodeMap.get(cleanID(hp[m]));
-          links.push({"source":node, "target":target, "type":"HP"});
+          if (node != target) {
+            links.push({"source":node, "target":target, "type":"HP"});
+          }
         }
       }
     }
@@ -81,7 +83,7 @@ d3.text("subcell.txt", function(text) {
       if (hi) {
         for (var m = 0; m < hi.length; m++) {
           var target = nodeMap.get(cleanID(hi[m]));
-          if (target){
+          if (target && target != node){
             links.push({"source":node, "target":target, "type":"HI"});
           } else {
             console.log("missing ID! Yikes! " + hi[m]);

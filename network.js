@@ -99,7 +99,10 @@ function initialise (graph) {
                   .enter().append("svg:path")
                   .attr("class", function (d) {
                       return "link " + d.type;
-                  });
+                  })
+								.attr("stroke-width", 1.5 + "px")
+								.attr("stroke-dasharray", function (d) {return d.type == "HI"? (6) + ", " + (6) : null});
+
 		var drag = d3.behavior.drag()
 					.on("drag", function(d,i) {
 						d.x += d3.event.dx
@@ -230,7 +233,8 @@ function initialise (graph) {
 	zoom.on("zoom", function() {
 		topG.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 		innerG.attr("transform", "translate(0 0)scale(" + (1/d3.event.scale) + ")");
-		path.attr("stroke-width", (1.5/d3.event.scale) + "px");
+		path.attr("stroke-width", 1.5 / d3.event.scale + "px")
+				.attr("stroke-dasharray",function (d) {return d.type == "HI"? (6/  d3.event.scale) + ", " + (6/  d3.event.scale) : null});
 	});
 
 	svg.call(zoom);

@@ -4,13 +4,13 @@ body {
 path.link {
     fill: none;
     stroke: #666;
-    stroke-width: 1.5px;
+    /* stroke-width: 1.5px; */
 }
 path.link.licensing {
     stroke: green;
 }
 path.link.HI {
-    stroke-dasharray: 0, 2 1;
+    /* stroke-dasharray: 0, 2 1; */
 }
 marker#licensing {
     fill: green;
